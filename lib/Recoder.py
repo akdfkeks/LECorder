@@ -11,21 +11,25 @@ import win32con
 
 class Recorder():
 	def __init__(self, winName, frame):
-		self.w = 0
-		self.h = 0
-		self.frame = frame
 		self.winName = winName
-		self.filename = time.strftime('%Y-%m-%d-%H-%M-%S', time.localtime(time.time()))
-
+		self.frame = frame
 		self.hwnd = win32gui.FindWindow(None, self.winName)
+
+		left, top, right, bot = win32gui.GetWindowRect(self.hwnd)
+
+		self.w= right - left
+		self.h= bot - top
+
 		self.hwndDC = win32gui.GetWindowDC(self.hwnd)
-		
 		self.mfcDC = win32ui.CreateDCFromHandle(self.hwndDC)
 		self.saveDC = self.mfcDC.CreateCompatibleDC()
 		
 		self.saveBitMap = win32ui.CreateBitmap()
 		self.saveBitMap.CreateCompatibleBitmap(self.mfcDC, self.w, self.h)
 		self.saveDC.SelectObject(self.saveBitMap)
+		self.filename = time.strftime('%Y-%m-%d-%H-%M-%S', time.localtime(time.time()))
+		
+		self.record()
 	
 	def __del__(self):
 		win32gui.DeleteObject(self.saveBitMap.GetHandle())

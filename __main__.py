@@ -41,7 +41,7 @@ class App(QWidget):
 
         recordBT = QPushButton("Record", self)
         recordBT.setGeometry(120,MARGIN_TOP,BUTTON_WIDTH,BUTTON_HEIGHT)
-        recordBT.clicked.connect(lambda:self.recordVideo(selectedWindow, frame))
+        recordBT.clicked.connect(self.recordVideo)
 
         storegyopenBT = QPushButton("Open\nStoregy", self)
         storegyopenBT.setGeometry(230, MARGIN_TOP, BUTTON_WIDTH, BUTTON_HEIGHT)
@@ -63,15 +63,12 @@ class App(QWidget):
             QMessageBox.about(self, "Window Selector", "녹화 대상을 선택하세요")
         except:
             QMessageBox.about(self, "Error", "Error has occured!")
-        '''selectedWindow = '''
+        '''selecting Window = '''
         self.setEnabled(False)
-        
-    def recordVideo(self, selectedWindow, frame):
-        v1 = Recorder(selectedWindow, frame)
-        if not (v1 == None):
-            v1.record()
-        
-        
+
+    def recordVideo(self):
+        v1 = Recorder(self.selectedWindow, self.frame)
+
     def openStoregy(self):
         try:
             desktopPath = os.path.join(os.path.expanduser('~'),"Desktop","LECoder")
