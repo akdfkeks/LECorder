@@ -1,6 +1,7 @@
+#-*-coding:utf-8
 import sys
-import cv2
 import os
+from lib.Recoder import Recorder
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import QtGui
@@ -14,6 +15,8 @@ from pywinauto import *
 MARGIN_TOP = 10
 BUTTON_WIDTH = 100
 BUTTON_HEIGHT = 60
+selectedWindow = "명령 프롬프트"
+frame = 30
 
 class App(QWidget):
 
@@ -28,7 +31,7 @@ class App(QWidget):
         self.setWindowTitle('LECoder')
         self.center()
         self.setFixedSize(450, MARGIN_TOP + BUTTON_HEIGHT + 40)
-        self.setFont(QtGui.QFont("Consolas",15))
+        self.setFont(QtGui.QFont("Consolas",12))
         self.setButton()
 
     def setButton(self):
@@ -38,6 +41,7 @@ class App(QWidget):
 
         recordBT = QPushButton("Record", self)
         recordBT.setGeometry(120,MARGIN_TOP,BUTTON_WIDTH,BUTTON_HEIGHT)
+        recordBT.clicked.connect(lambda:self.recordVideo(selectedWindow, frame))
 
         storegyopenBT = QPushButton("Open\nStoregy", self)
         storegyopenBT.setGeometry(230, MARGIN_TOP, BUTTON_WIDTH, BUTTON_HEIGHT)
@@ -55,10 +59,19 @@ class App(QWidget):
 
 
     def windowSelector(self):
-        QMessageBox.about(self, "Window Selector", "녹화 대상을 선택하세요")
+        try:
+            QMessageBox.about(self, "Window Selector", "녹화 대상을 선택하세요")
+        except:
+            QMessageBox.about(self, "Error", "Error has occured!")
         '''selectedWindow = '''
         self.setEnabled(False)
-
+        
+    def recordVideo(self, selectedWindow, frame):
+        v1 = Recorder(selectedWindow, frame)
+        if not (v1 == None):
+            v1.record()
+        
+        
     def openStoregy(self):
         try:
             desktopPath = os.path.join(os.path.expanduser('~'),"Desktop","LECoder")
