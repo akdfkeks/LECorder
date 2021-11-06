@@ -3,10 +3,16 @@ import cv2
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import QtGui
+import warnings
+warnings.simplefilter("ignore", UserWarning)
+sys.coinit_flags = 2
+
 from pywinauto import *
 
-global MARGIN_TOP
-MARGIN_TOP = 20
+
+MARGIN_TOP = 10
+BUTTON_WIDTH = 100
+BUTTON_HEIGHT = 60
 
 class App(QWidget):
 
@@ -20,23 +26,28 @@ class App(QWidget):
     def setUI(self):
         self.setWindowTitle('LECoder')
         self.center()
-        self.setFixedSize(450, MARGIN_TOP + 120)
+        self.setFixedSize(450, MARGIN_TOP + BUTTON_HEIGHT + 40)
         self.setFont(QtGui.QFont("Consolas",15))
+        self.setButton()
 
-        '''Setup Buttons'''
+    def setButton(self):
         selectwindowBT = QPushButton("Select\nWindow", self)
-        selectwindowBT.setGeometry(10,MARGIN_TOP,100,60)
+        selectwindowBT.setGeometry(10,MARGIN_TOP,BUTTON_WIDTH,BUTTON_HEIGHT)
         selectwindowBT.clicked.connect(self.windowSelector)
 
         recordBT = QPushButton("Record", self)
-        recordBT.setGeometry(120,MARGIN_TOP,100,60)
+        recordBT.setGeometry(120,MARGIN_TOP,BUTTON_WIDTH,BUTTON_HEIGHT)
 
         storegyopenBT = QPushButton("Open\nStoregy", self)
-        storegyopenBT.setGeometry(230, MARGIN_TOP, 100, 60)
+        storegyopenBT.setGeometry(230, MARGIN_TOP, BUTTON_WIDTH, BUTTON_HEIGHT)
 
         settingsBT = QPushButton("Settings", self)
-        settingsBT.setGeometry(340, MARGIN_TOP, 100,60)
+        settingsBT.setGeometry(340, MARGIN_TOP, BUTTON_WIDTH,BUTTON_HEIGHT)
 
+        developerinfoLabel = QLabel("GitHub Link", self)
+        developerinfoLabel.setGeometry(10, MARGIN_TOP + BUTTON_HEIGHT + 10, 450,20)
+        developerinfoLabel.setText('<a href="https://github.com/akdfkeks">Developer\'s GitHub</a>')
+        developerinfoLabel.setOpenExternalLinks(True)
 
 
 
