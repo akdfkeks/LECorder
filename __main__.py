@@ -1,5 +1,6 @@
 import sys
 import cv2
+import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5 import QtGui
@@ -40,6 +41,7 @@ class App(QWidget):
 
         storegyopenBT = QPushButton("Open\nStoregy", self)
         storegyopenBT.setGeometry(230, MARGIN_TOP, BUTTON_WIDTH, BUTTON_HEIGHT)
+        storegyopenBT.clicked.connect(self.openStoregy)
 
         settingsBT = QPushButton("Settings", self)
         settingsBT.setGeometry(340, MARGIN_TOP, BUTTON_WIDTH,BUTTON_HEIGHT)
@@ -56,6 +58,15 @@ class App(QWidget):
         QMessageBox.about(self, "Window Selector", "녹화 대상을 선택하세요")
         '''selectedWindow = '''
         self.setEnabled(False)
+
+    def openStoregy(self):
+        try:
+            desktopPath = os.path.join(os.path.expanduser('~'),"Desktop","LECoder")
+            if not (os.path.isdir(desktopPath)):
+                os.makedirs(desktopPath)
+            os.startfile(desktopPath)
+        except:
+            QMessageBox.about(self, "Error", "Error has occured!")
 
     def center(self):
         qr = self.frameGeometry()
