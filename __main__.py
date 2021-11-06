@@ -15,7 +15,7 @@ from pywinauto import *
 MARGIN_TOP = 10
 BUTTON_WIDTH = 100
 BUTTON_HEIGHT = 60
-selectedWindow = "명령 프롬프트"
+selectedWindow = "Discord"
 frame = 30
 
 class App(QWidget):

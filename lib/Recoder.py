@@ -26,15 +26,6 @@ class Recorder():
 		self.saveBitMap = win32ui.CreateBitmap()
 		self.saveBitMap.CreateCompatibleBitmap(self.mfcDC, self.w, self.h)
 		self.saveDC.SelectObject(self.saveBitMap)
-		
-		self.result = windll.user32.PrintWindow(self.hwnd, self.saveDC.GetSafeHdc(), 0)
-		
-		self.bmpinfo = self.saveBitMap.GetInfo()
-		self.bmpstr = self.saveBitMap.GetBitmapBits(True)
-		self.default_bmpinfo = self.bmpinfo
-		self.default_bmpstr = self.bmpstr
-		
-		self.setwindowSize()
 	
 	def __del__(self):
 		win32gui.DeleteObject(self.saveBitMap.GetHandle())
@@ -50,13 +41,9 @@ class Recorder():
 		print(self.hwnd)
 		try:
 			while(True):
-				if not (self.default_bmpinfo['bmWidth']==self.bmpinfo['bmWidth'] and self.default_bmpinfo['bmHeight']==self.bmpinfo['bmHeight']):
-					self.setwindowSize()
-				#im = Image.frombuffer('RGB',(self.default_bmpinfo['bmWidth'], self.default_bmpinfo['bmHeight']), self.default_bmpstr, 'raw', 'BGRX', 0, 1)
 				self.saveDC.BitBlt((0, 0),(self.w, self.h), self.mfcDC, (0, 0), win32con.SRCCOPY)
-				self.saveBitMap.SaveBitmapFile(self.saveDC, 't.png')
-				time.sleep(1.0)
-				#video.write(cv2.cvtColor(im,cv2.COLOR_BGR2RGB))
+				self.saveBitMap.SaveBitmapFile(self.saveDC, 'screenshot.bmp')
+				break
 		except Exception as err:
 			print(err)
 
@@ -64,12 +51,3 @@ class Recorder():
 		cv2.destroyAllWindows()
 		
 		video.release()
-
-	def setwindowSize(self):
-		left, top, right, bot = win32gui.GetWindowRect(self.hwnd)
-		self.w= right - left
-		self.h= bot - top
-		self.saveBitMap.CreateCompatibleBitmap(self.mfcDC, self.w, self.h)
-		self.bmpinfo = self.saveBitMap.GetInfo()
-		self.default_bmpinfo = self.bmpinfo
-		self.default_bmpstr = self.saveBitMap.GetBitmapBits(True)
