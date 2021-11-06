@@ -7,6 +7,7 @@ from PIL import Image
 from ctypes import windll
 import win32gui
 import win32ui
+import win32con
 
 class Recorder():
 	def __init__(self, winName, frame):
@@ -18,6 +19,7 @@ class Recorder():
 
 		self.hwnd = win32gui.FindWindow(None, self.winName)
 		self.hwndDC = win32gui.GetWindowDC(self.hwnd)
+		
 		self.mfcDC = win32ui.CreateDCFromHandle(self.hwndDC)
 		self.saveDC = self.mfcDC.CreateCompatibleDC()
 		
@@ -50,8 +52,9 @@ class Recorder():
 			while(True):
 				if not (self.default_bmpinfo['bmWidth']==self.bmpinfo['bmWidth'] and self.default_bmpinfo['bmHeight']==self.bmpinfo['bmHeight']):
 					self.setwindowSize()
-				im = Image.frombuffer('RGB',(self.default_bmpinfo['bmWidth'], self.default_bmpinfo['bmHeight']), self.default_bmpstr, 'raw', 'BGRX', 0, 1)
-				im.show()
+				#im = Image.frombuffer('RGB',(self.default_bmpinfo['bmWidth'], self.default_bmpinfo['bmHeight']), self.default_bmpstr, 'raw', 'BGRX', 0, 1)
+				self.saveDC.BitBlt((0, 0),(self.w, self.h), self.mfcDC, (0, 0), win32con.SRCCOPY)
+				self.saveBitMap.SaveBitmapFile(self.saveDC, 't.png')
 				time.sleep(1.0)
 				#video.write(cv2.cvtColor(im,cv2.COLOR_BGR2RGB))
 		except Exception as err:
