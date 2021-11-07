@@ -43,13 +43,15 @@ class Recorder():
 		video = cv2.VideoWriter(path + '.avi',cv2.VideoWriter_fourcc(*'DIVX'), self.frame, (self.w,self.h))
 		
 		print(self.hwnd)
-		try:
-			while(True):
-				self.saveDC.BitBlt((0, 0),(self.w, self.h), self.mfcDC, (0, 0), win32con.SRCCOPY)
-				self.saveBitMap.SaveBitmapFile(self.saveDC, 'screenshot.bmp')
-				break
-		except Exception as err:
-			print(err)
+		#try:
+			##while(True):
+		for i in range(30):
+			self.saveDC.SelectObject(self.saveBitMap)
+			self.saveDC.BitBlt((0, 0),(self.w, self.h), self.mfcDC, (0, 0), win32con.SRCCOPY)
+			#self.saveBitMap.SaveBitmapFile(self.saveDC, "t.png")
+			self.saveBitMap.Paint(self.saveDC)
+		#except Exception as err:
+		#	print(err)
 
 		cap.release()
 		cv2.destroyAllWindows()

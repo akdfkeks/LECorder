@@ -15,7 +15,7 @@ from pywinauto import *
 MARGIN_TOP = 10
 BUTTON_WIDTH = 100
 BUTTON_HEIGHT = 60
-selectedWindow = "Discord"
+selectedWindow = "(고전)삼행시에서도 빵셔틀 당하는 사람 - Youtube - Whale"
 frame = 30
 
 class App(QWidget):
@@ -67,7 +67,7 @@ class App(QWidget):
         self.setEnabled(False)
 
     def recordVideo(self):
-        v1 = Recorder(self.selectedWindow, self.frame)
+        v1 = Recorder(selectedWindow, frame)
 
     def openStoregy(self):
         try:
