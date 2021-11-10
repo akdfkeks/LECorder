@@ -39,38 +39,36 @@ class Recorder():
 		
 	def record(self):
 		path = os.path.join(os.path.expanduser('~'),'Desktop','LECoder', self.filename)
-		#cap = cv2.VideoCapture(0)
+		
 		video = cv2.VideoWriter(path + '.mp4', cv2.VideoWriter_fourcc(*'mp4v'), self.frame, (self.w,self.h))
 		
 		print(self.hwnd)
 		#try:
 			##while(True):
-		for i in range(3):
+		for i in range(100):
+			start_time = time.time()
+
 			left, top, right, bot = win32gui.GetWindowRect(self.hwnd)
 			self.w= right - left
 			self.h= bot - top
 			self.saveBitMap.CreateCompatibleBitmap(self.mfcDC, self.w, self.h)
 			self.saveDC.SelectObject(self.saveBitMap)
 			self.saveDC.BitBlt((0, 0),(self.w, self.h), self.mfcDC, (0, 0), win32con.SRCCOPY)
-			self.saveBitMap.SaveBitmapFile(self.saveDC, ("t"+ f'{i}' +".png"))
-			temp = self.saveBitMap.GetBitmapBits(True)
-			
-			bmparray = np.s(dataBitMap.GetBitmapBits(), dtype=numpy.uint8)
-			pil_im = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmparray, 'raw', 'BGRX', 0, 1)
-			pil_array = numpy.array(pil_im)
-			cv_im = cv2.cvtColor(pil_array, cv2.COLOR_RGB2BGR)
-			
-			
-			
-			
-			print(frame)
 
-			#video.write(frame)
 
+			bmp = np.fromstring(self.saveBitMap.GetBitmapBits(True), dtype='uint8')
+			pil_im = Image.frombuffer('RGB', (self.w, self.h), bmp, 'raw', 'BGRX', 0, 1)
+
+			pil_array = np.array(pil_im)
+			frame = cv2.cvtColor(pil_array, cv2.COLOR_RGB2BGR)
+
+			video.write(frame)
+
+			end_time = time.time()
+			print("WorkingTime: {} sec".format(end_time-start_time))
 		#except Exception as err:
 		#	print(err)
 
-		#cap.release()
 		video.release()
 		cv2.destroyAllWindows()
 		print("end")
