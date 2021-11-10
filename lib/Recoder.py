@@ -53,8 +53,16 @@ class Recorder():
 			self.saveDC.SelectObject(self.saveBitMap)
 			self.saveDC.BitBlt((0, 0),(self.w, self.h), self.mfcDC, (0, 0), win32con.SRCCOPY)
 			self.saveBitMap.SaveBitmapFile(self.saveDC, ("t"+ f'{i}' +".png"))
-			#frame = np.fromstring(self.saveBitMap.GetBitmapBits(True), dtype='uint8')
-			frame = np.fromstring(self.saveBitMap.LoadBitmap(self.saveDC), dtype='uint8')
+			temp = self.saveBitMap.GetBitmapBits(True)
+			
+			bmparray = np.s(dataBitMap.GetBitmapBits(), dtype=numpy.uint8)
+			pil_im = Image.frombuffer('RGB', (bmpinfo['bmWidth'], bmpinfo['bmHeight']), bmparray, 'raw', 'BGRX', 0, 1)
+			pil_array = numpy.array(pil_im)
+			cv_im = cv2.cvtColor(pil_array, cv2.COLOR_RGB2BGR)
+			
+			
+			
+			
 			print(frame)
 
 			#video.write(frame)
