@@ -15,7 +15,7 @@ from pywinauto import *
 MARGIN_TOP = 10
 BUTTON_WIDTH = 100
 BUTTON_HEIGHT = 60
-selectedWindow = "카카오톡"
+selectedWindow = "Webex"
 frame = 30
 
 class App(QWidget):

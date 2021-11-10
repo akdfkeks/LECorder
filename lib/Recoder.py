@@ -45,19 +45,20 @@ class Recorder():
 		print(self.hwnd)
 		#try:
 			##while(True):
-		for i in range(5):
+		for i in range(3):
 			left, top, right, bot = win32gui.GetWindowRect(self.hwnd)
 			self.w= right - left
 			self.h= bot - top
 			self.saveBitMap.CreateCompatibleBitmap(self.mfcDC, self.w, self.h)
 			self.saveDC.SelectObject(self.saveBitMap)
 			self.saveDC.BitBlt((0, 0),(self.w, self.h), self.mfcDC, (0, 0), win32con.SRCCOPY)
-			#self.saveBitMap.SaveBitmapFile(self.saveDC, ("t"+ f'{i}' +".png"))
-			frame = np.array(self.saveBitMap.GetBitmapBits(False))
+			self.saveBitMap.SaveBitmapFile(self.saveDC, ("t"+ f'{i}' +".png"))
+			#frame = np.fromstring(self.saveBitMap.GetBitmapBits(True), dtype='uint8')
+			frame = np.fromstring(self.saveBitMap.LoadBitmap(self.saveDC), dtype='uint8')
 			print(frame)
-			Image.show(frame)
-			video.write(frame)
-			
+
+			#video.write(frame)
+
 		#except Exception as err:
 		#	print(err)
 
