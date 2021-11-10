@@ -15,7 +15,7 @@ from pywinauto import *
 MARGIN_TOP = 10
 BUTTON_WIDTH = 100
 BUTTON_HEIGHT = 60
-selectedWindow = "(고전)삼행시에서도 빵셔틀 당하는 사람 - Youtube - Whale"
+selectedWindow = "카카오톡"
 frame = 30
 
 class App(QWidget):
@@ -63,12 +63,13 @@ class App(QWidget):
             QMessageBox.about(self, "Window Selector", "녹화 대상을 선택하세요")
         except:
             QMessageBox.about(self, "Error", "Error has occured!")
-        '''selecting Window = '''
+        '''selectedWindow = '''
         self.setEnabled(False)
-
+        
     def recordVideo(self):
         v1 = Recorder(selectedWindow, frame)
-
+        
+        
     def openStoregy(self):
         try:
             desktopPath = os.path.join(os.path.expanduser('~'),"Desktop","LECoder")

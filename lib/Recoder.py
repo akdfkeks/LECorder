@@ -4,7 +4,7 @@ import cv2
 import time
 import os
 from PIL import Image
-from ctypes import windll
+import numpy as np
 import win32gui
 import win32ui
 import win32con
@@ -39,21 +39,30 @@ class Recorder():
 		
 	def record(self):
 		path = os.path.join(os.path.expanduser('~'),'Desktop','LECoder', self.filename)
-		cap = cv2.VideoCapture(0)
-		video = cv2.VideoWriter(path + '.avi',cv2.VideoWriter_fourcc(*'DIVX'), self.frame, (self.w,self.h))
+		#cap = cv2.VideoCapture(0)
+		video = cv2.VideoWriter(path + '.mp4', cv2.VideoWriter_fourcc(*'mp4v'), self.frame, (self.w,self.h))
 		
 		print(self.hwnd)
 		#try:
 			##while(True):
-		for i in range(30):
+		for i in range(5):
+			left, top, right, bot = win32gui.GetWindowRect(self.hwnd)
+			self.w= right - left
+			self.h= bot - top
+			self.saveBitMap.CreateCompatibleBitmap(self.mfcDC, self.w, self.h)
 			self.saveDC.SelectObject(self.saveBitMap)
 			self.saveDC.BitBlt((0, 0),(self.w, self.h), self.mfcDC, (0, 0), win32con.SRCCOPY)
-			#self.saveBitMap.SaveBitmapFile(self.saveDC, "t.png")
-			self.saveBitMap.Paint(self.saveDC)
+			#self.saveBitMap.SaveBitmapFile(self.saveDC, ("t"+ f'{i}' +".png"))
+			frame = np.array(self.saveBitMap.GetBitmapBits(False))
+			print(frame)
+			Image.show(frame)
+			video.write(frame)
+			
 		#except Exception as err:
 		#	print(err)
 
-		cap.release()
-		cv2.destroyAllWindows()
-		
+		#cap.release()
 		video.release()
+		cv2.destroyAllWindows()
+		print("end")
+		
